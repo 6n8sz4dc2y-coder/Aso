@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RRG Group Dashboard</title>
+<link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+<header><div class="header-row"><div><h1>RRG Group Dashboard</h1><div class="subtitle">Readable static dashboard from Weekly Update.xlsx · GitHub Pages friendly</div></div><div class="subtitle">Working version · single index.html</div></div><nav><button class="active" data-target="dashboard">Dashboard</button><button data-target="q3regs">Q3 Registrations</button><button data-target="used">Used Cars</button><button data-target="fleet">Fleet</button><button data-target="q2">Q2 Reference</button></nav></header>
+<main>
+<section id="dashboard" class="section active"><div class="grid"><div class="card kpi"><div class="label">Q3 Registration Target</div><div class="value" id="q3Target">-</div><div class="note">North + West Yorkshire</div></div><div class="card kpi"><div class="label">Q3 Current Regs</div><div class="value" id="q3Current">-</div><div class="note">Current loaded data</div></div><div class="card kpi"><div class="label">Q3 To Go</div><div class="value" id="q3ToGo">-</div><div class="note">Required to hit target</div></div><div class="card kpi"><div class="label">Used Target</div><div class="value" id="usedTarget">-</div><div class="note">Q3 used counting volume</div></div><div class="card half"><h3>Q3 CDA Summary</h3><div id="cdaSummary" class="leader"></div></div><div class="card half"><h3>Centre Registration Targets</h3><div id="leaderboard" class="leader"></div></div><div class="card wide"><h3>Executive Note</h3><div class="note-box" id="execNote"></div></div></div></section>
+<section id="q3regs" class="section"><div class="card wide"><div class="toolbar"><h2>Q3 Registrations</h2><input class="search" data-filter="q3Table" placeholder="Search centre or CDA..."></div><div class="table-wrap"><table id="q3Table"></table></div></div></section>
+<section id="used" class="section"><div class="card wide"><div class="toolbar"><h2>Used Counting Volume</h2><input class="search" data-filter="usedTable" placeholder="Search centre or CDA..."></div><div class="table-wrap"><table id="usedTable"></table></div></div></section>
+<section id="fleet" class="section"><div class="grid"><div class="card wide"><div class="toolbar"><h2>Centre Fleet BCH</h2><input class="search" data-filter="fleetTable" placeholder="Search centre or CDA..."></div><div class="table-wrap"><table id="fleetTable"></table></div></div><div class="card wide"><div class="toolbar"><h2>Non-Counting Fleet</h2><input class="search" data-filter="nonTable" placeholder="Search centre or CDA..."></div><div class="table-wrap"><table id="nonTable"></table></div></div></div></section>
+<section id="q2" class="section"><div class="grid"><div class="card wide"><div class="toolbar"><h2>Q2 Registrations Reference</h2><input class="search" data-filter="q2RegTable" placeholder="Search centre or CDA..."></div><div class="table-wrap"><table id="q2RegTable"></table></div></div><div class="card wide"><div class="toolbar"><h2>Q2 Used Reference</h2><input class="search" data-filter="q2UsedTable" placeholder="Search centre or CDA..."></div><div class="table-wrap"><table id="q2UsedTable"></table></div></div></div></section>
+<div class="footer-note">Tables are deliberately clear, wide and scrollable. This version avoids Next.js and will run as a single GitHub Pages index.html file.</div></main>
+<script src="./app.js"></script></body></html>
