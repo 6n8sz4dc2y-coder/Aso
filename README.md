@@ -1,19 +1,21 @@
 # RRG Group Dashboard
 
-Static GitHub Pages dashboard for RRG Group performance reporting.
-
-## Files
-
-- `index.html` - dashboard page
-- `styles.css` - styling
-- `app.js` - embedded data and table rendering
+Static GitHub Pages dashboard for weekly RRG performance reporting.
 
 ## Deploy
 
-Upload all files to the root of a GitHub repository and enable GitHub Pages from the `main` branch `/root`.
+Upload these files to the root of the GitHub repository and enable GitHub Pages from `main` / root:
 
-## Latest additions
+- `index.html`
+- `styles.css`
+- `app.js`
+- `README.md`
+- `CHANGELOG.md`
+- `LICENSE`
 
-- Fleet by month + BCH position
-- Order bank targets and H1 order actuals
-- Sales funnel activity including enquiries, test drives, OS and conversion ratios
+## v0.4 focus
+
+- H2 active period displayed in the header and top KPI cards.
+- Dashboard snapshots focused on Gavin's seven sites: Bolton, Bury, Rochdale, SQ, Bradford, Huddersfield and Silsden.
+- Order Bank snapshot now shows H2 target.
+- Sales Funnel snapshot shows the seven sites only.
