@@ -21,3 +21,10 @@
 - Added Order Bank upload to Admin Update.
 - Order Bank tab can now be updated from the order bank spreadsheet.
 - Keeps root-file GitHub Pages structure unchanged.
+
+
+## Order Bank import fix
+- Order Bank admin upload now strips the RRG prefix from centre names.
+- Orders / Order Bank tab reads the dedicated Order Bank Targets file.
+- Sales Activity orders remain separate and only affect the Sales Funnel tab.
+- Embedded order bank data refreshed from the supplied workbook.

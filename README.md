@@ -16,3 +16,7 @@ Upload all files to the root of your GitHub Pages repository.
 
 ## Admin updates
 Open the Admin Update tab, upload Weekly Update.xlsx and Sales Activity.xls, press Preview Import, then Publish. The update is stored in the browser using localStorage. Use Download data backup to keep a JSON copy of the latest data.
+
+
+### Order Bank upload
+Use the Order Bank Targets workbook in the Admin tab for the Orders / Order Bank tab. This is separate from the Orders column inside Sales Activity.
