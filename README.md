@@ -1,14 +1,28 @@
 # RRG Group Dashboard
 
-GitHub Pages dashboard for weekly RRG Group performance reporting.
+Static GitHub Pages dashboard for weekly RRG performance reporting.
 
-## v0.9
-- Dashboard keeps the top focus on new registrations, used cars and non-counting fleet.
-- Sales funnel table is ranked by orders.
-- Order bank tables are ranked by July done / current-month order volume.
-- Centre registration targets are ranked by percentage to target.
-- Used cars are ranked by percentage to target.
-- Added a dashboard highlights box.
+## Files
 
-## Deploy
-Upload all files to the root of your GitHub Pages repository.
+- `index.html` — dashboard shell and pages
+- `css/styles.css` — styling
+- `js/app.js` — dashboard logic, admin import and trends
+- `data/weekly-data.js` — current weekly data source
+
+## Weekly update process
+
+1. Open the live dashboard.
+2. Go to **Admin Update**.
+3. Upload:
+   - `Weekly Update.xlsx`
+   - `SalesActivity.xls`
+4. Click **Preview Import**.
+5. Click **Publish Snapshot**.
+6. Click **Download data.js**.
+7. Replace `data/weekly-data.js` in GitHub with the downloaded file.
+
+GitHub Pages will refresh after the commit.
+
+## Notes
+
+The dashboard is plain HTML/CSS/JavaScript so it runs on GitHub Pages without a build step.
