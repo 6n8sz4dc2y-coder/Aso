@@ -16,3 +16,8 @@
 - Added Admin Update tab for Weekly Update.xlsx and Sales Activity.xls.
 - Added preview, publish, local browser storage and data backup download.
 - Kept root-file GitHub Pages structure.
+
+## v0.9 Admin Orders
+- Added Order Bank upload to Admin Update.
+- Order Bank tab can now be updated from the order bank spreadsheet.
+- Keeps root-file GitHub Pages structure unchanged.

@@ -10,6 +10,8 @@ const fmt=n=>{if(n===null||n===undefined||Number.isNaN(n))return "-";return new 
 const pct=n=>{if(n===null||n===undefined||Number.isNaN(n))return "-";return Math.round(n*100)+"%"};
 const siteLabel=c=>c==='SQ'?'SQ':c;
 function activityOrdersFor(centre){const normal=x=>String(x||'').trim().toLowerCase().replace('salford quays','sq');const row=(DATA.dashboard_activity||[]).find(r=>normal(r.centre)===normal(centre));return row ? (Number(row.total_orders)||0) : 0;}
+function orderDoneFor(row, month){const v=row ? row[month+'_orders'] : null;return (v===null||v===undefined||v==='') ? 0 : (Number(v)||0);}
+function currentOrderMonth(){const m=new Date().getMonth();return ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'][m] || 'jul';}
 const statusClass=n=> n>=1?'green':n>=.9?'amber':'red';
 const progress=n=>`<div class="progress"><div class="bar ${statusClass(n)}" style="width:${Math.min(Math.max(n*100,0),120)}%"></div></div>`;
 const status=n=>`<span class="status ${statusClass(n)}">${n>=1?'On / Ahead':n>=.9?'Watch':'Behind'}</span>`;
@@ -98,8 +100,8 @@ function build(){
  makeTable('fleetMonthlyTable',[{label:'Centre',key:'centre'},{label:'Jul Fleet',key:'jul_fleet',num:true},{label:'Aug Fleet',key:'aug_fleet',num:true},{label:'Sep Fleet',key:'sep_fleet',num:true},{label:'QTR Fleet',key:'qtr_fleet',num:true},{label:'BCH Regs',key:'bch_regs',num:true},{label:'BCH Target',key:'bch_target',num:true},{label:'BCH Progress',value:r=>r.bch_target?r.bch_regs/r.bch_target:0,format:'progress'},{label:'BCH %',value:r=>r.bch_target?r.bch_regs/r.bch_target:0,format:'pct',num:true},{label:'Active Orders',key:'active_orders',num:true}],DATA.q3_fleet_monthly);
  makeTable('fleetTable',[{label:'Centre',key:'centre'},{label:'Regs',key:'regs',num:true},{label:'Target',key:'target',num:true},{label:'Progress',value:r=>r.target?r.regs/r.target:0,format:'progress'},{label:'%',value:r=>r.target?r.regs/r.target:0,format:'pct',num:true},{label:'Active Orders',key:'active_orders',num:true},{label:'Status',value:r=>r.target?r.regs/r.target:0,format:'status'}],DATA.q3_fleet);
  makeTable('nonTable',[{label:'Centre',key:'centre'},{label:'Jul Total',key:'jul_total',num:true},{label:'Jul Budget',key:'jul_budget',num:true},{label:'Aug Total',key:'aug_total',num:true},{label:'Aug Budget',key:'aug_budget',num:true},{label:'Sep Total',key:'sep_total',num:true},{label:'Sep Budget',key:'sep_budget',num:true},{label:'QTR Total',key:'qtr_total',num:true},{label:'QTR Budget',key:'qtr_budget',num:true}],DATA.q3_non);
- makeTable('orderBankTable',[{label:'Centre',key:'centre'},{label:'H1 Target',key:'h1_target',num:true},{label:'H1 Orders',key:'h1_orders',num:true},{label:'H1 Diff',key:'h1_diff',num:true},{label:'H1 %',key:'h1_pct',format:'pct',num:true},{label:'H2 Target',key:'h2_target',num:true},{label:'July Target',key:'jul_target',num:true},{label:'July Done',value:r=>activityOrdersFor(r.centre),num:true},{label:'July To Go',value:r=>(Number(r.jul_target)||0)-activityOrdersFor(r.centre),num:true},{label:'July Progress',value:r=>r.jul_target?activityOrdersFor(r.centre)/r.jul_target:0,format:'progress'},{label:'July %',value:r=>r.jul_target?activityOrdersFor(r.centre)/r.jul_target:0,format:'pct',num:true},{label:'Q3 Target',key:'q3_target',num:true},{label:'Q4 Target',key:'q4_target',num:true},{label:'CY26 OB',key:'cy26_target',num:true}],(DATA.dashboard_orders||[]).slice().sort((a,b)=>activityOrdersFor(b.centre)-activityOrdersFor(a.centre)));
- makeTable('monthlyOrderTable',[{label:'Centre',key:'centre'},{label:'H1 Target',key:'h1_target',num:true},{label:'H1 Orders',key:'h1_orders',num:true},{label:'H1 Diff',key:'h1_diff',num:true},{label:'H1 %',key:'h1_pct',format:'pct',num:true},{label:'H2 Target',key:'h2_target',num:true},{label:'Jul Target',key:'jul_target',num:true},{label:'Jul Done',value:r=>activityOrdersFor(r.centre),num:true},{label:'Jul To Go',value:r=>(Number(r.jul_target)||0)-activityOrdersFor(r.centre),num:true},{label:'Aug Target',key:'aug_target',num:true},{label:'Aug Done',key:'aug_orders',num:true},{label:'Sep Target',key:'sep_target',num:true},{label:'Sep Done',key:'sep_orders',num:true},{label:'Q3 Target',key:'q3_target',num:true},{label:'Q4 Target',key:'q4_target',num:true},{label:'Oct Target',key:'oct_target',num:true},{label:'Nov Target',key:'nov_target',num:true},{label:'Dec Target',key:'dec_target',num:true}],(DATA.dashboard_orders||[]).slice().sort((a,b)=>activityOrdersFor(b.centre)-activityOrdersFor(a.centre)));
+ makeTable('orderBankTable',[{label:'Centre',key:'centre'},{label:'H1 Target',key:'h1_target',num:true},{label:'H1 Orders',key:'h1_orders',num:true},{label:'H1 Diff',key:'h1_diff',num:true},{label:'H1 %',key:'h1_pct',format:'pct',num:true},{label:'H2 Target',key:'h2_target',num:true},{label:'July Target',key:'jul_target',num:true},{label:'July Done',value:r=>orderDoneFor(r,'jul'),num:true},{label:'July To Go',value:r=>(Number(r.jul_target)||0)-orderDoneFor(r,'jul'),num:true},{label:'July Progress',value:r=>r.jul_target?orderDoneFor(r,'jul')/r.jul_target:0,format:'progress'},{label:'July %',value:r=>r.jul_target?orderDoneFor(r,'jul')/r.jul_target:0,format:'pct',num:true},{label:'Q3 Target',key:'q3_target',num:true},{label:'Q4 Target',key:'q4_target',num:true},{label:'CY26 OB',key:'cy26_target',num:true}],(DATA.dashboard_orders||[]).slice().sort((a,b)=>orderDoneFor(b,currentOrderMonth())-orderDoneFor(a,currentOrderMonth())));
+ makeTable('monthlyOrderTable',[{label:'Centre',key:'centre'},{label:'H1 Target',key:'h1_target',num:true},{label:'H1 Orders',key:'h1_orders',num:true},{label:'H1 Diff',key:'h1_diff',num:true},{label:'H1 %',key:'h1_pct',format:'pct',num:true},{label:'H2 Target',key:'h2_target',num:true},{label:'Jul Target',key:'jul_target',num:true},{label:'Jul Done',value:r=>orderDoneFor(r,'jul'),num:true},{label:'Jul To Go',value:r=>(Number(r.jul_target)||0)-orderDoneFor(r,'jul'),num:true},{label:'Aug Target',key:'aug_target',num:true},{label:'Aug Done',key:'aug_orders',num:true},{label:'Sep Target',key:'sep_target',num:true},{label:'Sep Done',key:'sep_orders',num:true},{label:'Q3 Target',key:'q3_target',num:true},{label:'Q4 Target',key:'q4_target',num:true},{label:'Oct Target',key:'oct_target',num:true},{label:'Nov Target',key:'nov_target',num:true},{label:'Dec Target',key:'dec_target',num:true}],(DATA.dashboard_orders||[]).slice().sort((a,b)=>orderDoneFor(b,currentOrderMonth())-orderDoneFor(a,currentOrderMonth())));
  makeTable('activityTable',[{label:'Rank',value:(r)=>((DATA.dashboard_activity||[]).slice().sort((a,b)=>(b.total_orders||0)-(a.total_orders||0)).findIndex(x=>x.centre===r.centre)+1),num:true},{label:'Centre',key:'centre'},{label:'Enquiries',key:'total_enquiries',num:true},{label:'Test Drives',key:'total_test_drives',num:true},{label:'OS',key:'total_os',num:true},{label:'Orders',key:'total_orders',num:true},{label:'TD %',key:'td_ratio',format:'pct',num:true},{label:'Order %',key:'orders_ratio',format:'pct',num:true},{label:'OS %',key:'os_ratio',format:'pct',num:true},{label:'New Enq',key:'new_enquiries',num:true},{label:'New TD',key:'new_test_drives',num:true},{label:'New OS',key:'new_os',num:true},{label:'New Orders',key:'new_orders',num:true},{label:'Used Enq',key:'used_enquiries',num:true},{label:'Used TD',key:'used_test_drives',num:true},{label:'Used OS',key:'used_os',num:true},{label:'Used Orders',key:'used_orders',num:true},{label:'Delivered',key:'delivered',num:true},{label:'Lost Opp',key:'lost_opportunities',num:true}],(DATA.dashboard_activity||[]).slice().sort((a,b)=>(b.total_orders||0)-(a.total_orders||0)));
  makeTable('q2RegTable',[{label:'Centre',key:'centre'},{label:'Apr Total',key:'apr_total',num:true},{label:'Apr Target',key:'apr_target',num:true},{label:'May Total',key:'may_total',num:true},{label:'May Target',key:'may_target',num:true},{label:'Jun Total',key:'jun_total',num:true},{label:'Jun Target',key:'jun_target',num:true},{label:'QTR Total',key:'qtr_total',num:true},{label:'QTR Target',key:'qtr_target',num:true},{label:'Progress',value:r=>r.qtr_target?r.qtr_total/r.qtr_target:0,format:'progress'},{label:'%',key:'regs_v_target',format:'pct',num:true},{label:'To Go',key:'to_go',num:true}],DATA.q2_regs);
  makeTable('q2UsedTable',[{label:'Centre',key:'centre'},{label:'Apr Used',key:'apr_counting',num:true},{label:'Apr Target',key:'apr_target',num:true},{label:'May Used',key:'may_counting',num:true},{label:'May Target',key:'may_target',num:true},{label:'Jun Used',key:'jun_counting',num:true},{label:'Jun Target',key:'jun_target',num:true},{label:'QTR Used',key:'qtr_counting',num:true},{label:'QTR Target',key:'qtr_target',num:true},{label:'Progress',value:r=>r.qtr_target?r.qtr_counting/r.qtr_target:0,format:'progress'},{label:'%',value:r=>r.qtr_target?r.qtr_counting/r.qtr_target:0,format:'pct',num:true}],DATA.q2_used);
@@ -179,6 +181,59 @@ function parseWeeklyWorkbook(wb, data){
   }
   recomputeDashboardSets(data);
 }
+
+function parseOrderWorkbook(wb, data){
+  const ws = wb.Sheets['Order Bank Targets'] || wb.Sheets[wb.SheetNames[0]];
+  const a = XLSX.utils.sheet_to_json(ws,{header:1,defval:null,raw:true});
+  const ensureOrderRow = (centre)=>{
+    let row = (data.order_bank||[]).find(r=>normCentreName(r.centre).toLowerCase()===normCentreName(centre).toLowerCase());
+    if(!row){ row={centre:normCentreName(centre)}; data.order_bank = data.order_bank || []; data.order_bank.push(row); }
+    return row;
+  };
+  const topTargets = {};
+  for(let i=1;i<=11 && i<a.length;i++){
+    const r=a[i]; if(!r || !r[0]) continue;
+    const centre=normCentreName(r[0]);
+    topTargets[centre]={aso:nval(r[1]), q1_target:nval(r[3]), q2_target:nval(r[4]), q3_target:nval(r[5]), q4_target:nval(r[6]), cy26_target:nval(r[8])};
+  }
+  for(let i=14;i<=24 && i<a.length;i++){
+    const r=a[i]; if(!r || !r[0]) continue;
+    const centre=normCentreName(r[0]); const row=ensureOrderRow(centre);
+    Object.assign(row, topTargets[centre]||{});
+    Object.assign(row, {
+      jan_target:nval(r[1]), jan_orders:nval(r[2]), jan_diff:nval(r[3]),
+      feb_target:nval(r[4]), feb_orders:nval(r[5]), feb_diff:nval(r[6]),
+      mar_target:nval(r[7]), mar_orders:nval(r[8]), mar_diff:nval(r[9]),
+      apr_target:nval(r[10]), apr_orders:nval(r[11]), apr_diff:nval(r[12]),
+      may_target:nval(r[13]), may_orders:nval(r[14]), may_diff:nval(r[15]),
+      jun_target:nval(r[16]), jun_orders:nval(r[17]), jun_diff:nval(r[18])
+    });
+    row.h1_target = ['jan','feb','mar','apr','may','jun'].reduce((t,m)=>t+(Number(row[m+'_target'])||0),0);
+    row.h1_orders = ['jan','feb','mar','apr','may','jun'].reduce((t,m)=>t+(Number(row[m+'_orders'])||0),0);
+    row.h1_diff = row.h1_orders - row.h1_target;
+    row.h1_pct = row.h1_target ? row.h1_orders / row.h1_target : 0;
+  }
+  for(let i=29;i<=39 && i<a.length;i++){
+    const r=a[i]; if(!r || !r[0]) continue;
+    const centre=normCentreName(r[0]); const row=ensureOrderRow(centre);
+    Object.assign(row, topTargets[centre]||{});
+    const monthCols = {jul:[1,2,3], aug:[4,5,6], sep:[7,8,9], oct:[10,11,12], nov:[13,14,15], dec:[16,17,18]};
+    for(const [m,cols] of Object.entries(monthCols)){
+      const target=nval(r[cols[0]]);
+      const ordersRaw=r[cols[1]];
+      const orders=(ordersRaw===null || ordersRaw===undefined || ordersRaw==='') ? null : nval(ordersRaw);
+      row[m+'_target']=target;
+      row[m+'_orders']=orders;
+      row[m+'_diff']=(orders===null) ? -target : orders-target;
+    }
+    row.q3_target = row.q3_target || ['jul','aug','sep'].reduce((t,m)=>t+(Number(row[m+'_target'])||0),0);
+    row.q4_target = row.q4_target || ['oct','nov','dec'].reduce((t,m)=>t+(Number(row[m+'_target'])||0),0);
+    row.h2_target = ['jul','aug','sep','oct','nov','dec'].reduce((t,m)=>t+(Number(row[m+'_target'])||0),0);
+  }
+  recomputeDashboardSets(data);
+  return (data.order_bank||[]).length;
+}
+
 function parseSalesRows(rows, data){
   const siteRows=[];
   for(const r of rows){
@@ -226,12 +281,15 @@ function renderAdminPreview(data){
   rows.push({area:'New registrations',actual:regCurrent,target:regTarget,percent:regTarget?regCurrent/regTarget:0});
   rows.push({area:'Used cars',actual:usedCurrent,target:usedTarget,percent:usedTarget?usedCurrent/usedTarget:0});
   rows.push({area:'Sales enquiries',actual:act.reduce((a,r)=>a+(Number(r.total_enquiries)||0),0),target:'-',percent:null});
-  rows.push({area:'Orders',actual:act.reduce((a,r)=>a+(Number(r.total_orders)||0),0),target:'-',percent:null});
+  rows.push({area:'Sales activity orders',actual:act.reduce((a,r)=>a+(Number(r.total_orders)||0),0),target:'-',percent:null});
+  const om=currentOrderMonth(); const ord=data.dashboard_orders||[]; const obDone=ord.reduce((a,r)=>a+orderDoneFor(r,om),0); const obTarget=ord.reduce((a,r)=>a+(Number(r[om+'_target'])||0),0);
+  rows.push({area:'Order bank '+om.toUpperCase(),actual:obDone,target:obTarget,percent:obTarget?obDone/obTarget:0});
   makeTable('adminPreviewTable',[{label:'Area',key:'area'},{label:'Actual',key:'actual',num:true},{label:'Target',key:'target',num:true},{label:'%',key:'percent',format:'pct',num:true}],rows);
 }
 async function previewImport(){
   const weekly=document.getElementById('weeklyFile')?.files?.[0];
   const activity=document.getElementById('activityFile')?.files?.[0];
+  const order=document.getElementById('orderFile')?.files?.[0];
   const status=document.getElementById('adminStatus');
   const data=cloneData();
   const messages=[];
@@ -245,6 +303,12 @@ async function previewImport(){
     if(activity){
       const count=await parseSalesActivityFile(activity,data);
       messages.push(`Sales Activity imported (${count} centres)`);
+    }
+    if(order){
+      const buf=await readFileAsArrayBuffer(order);
+      const wb=XLSX.read(buf,{type:'array'});
+      const count=parseOrderWorkbook(wb,data);
+      messages.push(`Order Bank imported (${count} rows)`);
     }
     PENDING_DATA=data;
     renderAdminPreview(data);
