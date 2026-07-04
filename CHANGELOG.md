@@ -1,12 +1,8 @@
 # Changelog
 
-## v0.5
-- Split H1 and H2 order bank into clearer dashboard cards.
-- Changed order bank to a monthly objective view.
-- Added July target, July orders done, July to go and July progress.
-- Removed “your seven sites” wording from headings and notes.
-- Kept Q3 registrations, used cars, fleet BCH and sales funnel views.
+## v0.7
+- Added top dashboard KPI cards for total enquiries, test drive percentage, offer sheet percentage and conversion percentage.
+- Dashboard remains focused on new registrations, used cars and non-counting fleet, with sales activity totals visible at a glance.
 
-## v0.4
-- H2 active dashboard.
-- Order bank and sales funnel snapshots added.
+## v0.6
+- Simplified dashboard focus to new registrations, used cars and non-counting fleet.

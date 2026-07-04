@@ -11,26 +11,32 @@ function makeTable(id,cols,rows){const table=document.getElementById(id);table.i
 function leaderRows(rows, valueFn, subFn){return rows.slice().sort((a,b)=>valueFn(b)-valueFn(a)).map((r,i)=>{const v=valueFn(r);return `<div class="leader-row"><div class="rank">${i+1}</div><div class="centre">${siteLabel(r.centre)}<div class="mini">${subFn?subFn(r):''}</div></div><div class="pct">${pct(v)}</div>${progress(v)}</div>`}).join('')}
 function sum(rows,key){return rows.reduce((a,r)=>a+(Number(r[key])||0),0)}
 function build(){
- const regs=DATA.dashboard_regs, used=DATA.dashboard_used, orders=DATA.dashboard_orders, acts=DATA.dashboard_activity;
+ const regs=DATA.dashboard_regs, used=DATA.dashboard_used, non=DATA.q3_non, acts=DATA.dashboard_activity;
  const regTarget=sum(regs,'qtr_target'), regCurrent=sum(regs,'qtr_total'), regToGo=regTarget-regCurrent;
- const h1Orders=sum(orders,'h1_orders'), h1Target=sum(orders,'h1_target');
- const h2Target=sum(orders,'h2_target');
- const julOrderTarget=sum(orders,'jul_target');
- const julOrdersDone=sum(acts,'total_orders');
- const funnelOrders=julOrdersDone, funnelEnquiries=sum(acts,'total_enquiries');
+ const usedTarget=sum(used,'qtr_target'), usedCurrent=sum(used,'qtr_counting'), usedToGo=usedTarget-usedCurrent;
+ const nonFleetBudget=sum(non,'qtr_budget'), nonFleetCurrent=sum(non,'qtr_total');
  document.getElementById('q3Target').textContent=fmt(regTarget);
  document.getElementById('q3Current').textContent=fmt(regCurrent);
- document.getElementById('h1Orders').textContent=`${fmt(h1Orders)} / ${fmt(h1Target)}`;
- document.getElementById('h2Orders').textContent=fmt(h2Target);
- document.getElementById('julOrderTarget').textContent=fmt(julOrderTarget);
- document.getElementById('julOrdersDone').textContent=fmt(julOrdersDone);
+ document.getElementById('usedTarget').textContent=fmt(usedTarget);
+ document.getElementById('usedCurrent').textContent=fmt(usedCurrent);
+ document.getElementById('nonFleetBudget').textContent=fmt(nonFleetBudget);
+ document.getElementById('nonFleetCurrent').textContent=fmt(nonFleetCurrent);
+ const act = DATA.dashboard_activity || [];
+ const totalEnquiries = sum(act,'total_enquiries');
+ const totalTestDrives = sum(act,'total_test_drives');
+ const totalOS = sum(act,'total_os');
+ const totalOrders = sum(act,'total_orders');
+ document.getElementById('totalEnquiries').textContent = fmt(totalEnquiries);
+ document.getElementById('totalTdPct').textContent = pct(totalEnquiries ? totalTestDrives / totalEnquiries : 0);
+ document.getElementById('totalOsPct').textContent = pct(totalEnquiries ? totalOS / totalEnquiries : 0);
+ document.getElementById('totalConvPct').textContent = pct(totalEnquiries ? totalOrders / totalEnquiries : 0);
  document.getElementById('h2Period').innerHTML='<span class="period-pill muted">H1 closed</span><span class="period-pill active">H2 active · July onwards</span>';
  const north=DATA.q3_regs.find(r=>r.centre==='NORTH CDA'), wy=DATA.q3_regs.find(r=>r.centre==='WY CDA');
  document.getElementById('cdaSummary').innerHTML=[north,wy].filter(Boolean).map(r=>`<div class="leader-row"><div class="rank">●</div><div class="centre">${r.centre}<div class="mini">${fmt(r.qtr_total)} / ${fmt(r.qtr_target)} · To go ${fmt(r.to_go)}</div></div><div class="pct">${pct(r.qtr_target?r.qtr_total/r.qtr_target:0)}</div>${progress(r.qtr_target?r.qtr_total/r.qtr_target:0)}</div>`).join('');
  document.getElementById('leaderboard').innerHTML=leaderRows(regs,r=>r.qtr_target?r.qtr_total/r.qtr_target:0,r=>`${fmt(r.qtr_total)} / ${fmt(r.qtr_target)} · To go ${fmt(r.to_go)}`);
- document.getElementById('funnelSummary').innerHTML=acts.slice().sort((a,b)=>b.total_orders-a.total_orders).map((r,i)=>`<div class="leader-row"><div class="rank">${i+1}</div><div class="centre">${siteLabel(r.centre)}<div class="mini">${fmt(r.total_enquiries)} enquiries · ${fmt(r.total_test_drives)} TD · ${fmt(r.total_os)} OS</div></div><div class="pct">${fmt(r.total_orders)}</div>${progress(funnelOrders?r.total_orders/Math.max(...acts.map(x=>x.total_orders||0)):0)}</div>`).join('');
- document.getElementById('orderSummary').innerHTML=orders.slice().sort((a,b)=>(b.jul_target||0)-(a.jul_target||0)).map((r,i)=>{const done=activityOrdersFor(r.centre);const toGo=(Number(r.jul_target)||0)-done;return `<div class="leader-row"><div class="rank">${i+1}</div><div class="centre">${siteLabel(r.centre)}<div class="mini">July done ${fmt(done)} · To go ${fmt(toGo)} · H2 ${fmt(r.h2_target)}</div></div><div class="pct">${fmt(r.jul_target)}</div>${progress(r.jul_target?done/r.jul_target:0)}</div>`}).join('');
- document.getElementById('execNote').innerHTML=`<strong>H2 is now the active period.</strong> Q3 registration target is <strong>${fmt(regTarget)}</strong>, with <strong>${fmt(regToGo)}</strong> still to go in the loaded report. H1 and H2 order bank are now separated, with July shown as the active monthly objective. July order target is <strong>${fmt(julOrderTarget)}</strong>, with <strong>${fmt(julOrdersDone)}</strong> orders loaded. Sales funnel currently shows <strong>${fmt(funnelEnquiries)}</strong> enquiries, <strong>${fmt(sum(acts,'total_test_drives'))}</strong> test drives, <strong>${fmt(sum(acts,'total_os'))}</strong> offer sheets and <strong>${fmt(funnelOrders)}</strong> orders.`;
+ document.getElementById('usedSummary').innerHTML=leaderRows(used,r=>r.qtr_target?r.qtr_counting/r.qtr_target:0,r=>`${fmt(r.qtr_counting)} / ${fmt(r.qtr_target)} · To go ${fmt((r.qtr_target||0)-(r.qtr_counting||0))}`);
+ document.getElementById('nonFleetSummary').innerHTML=non.slice().sort((a,b)=>(b.qtr_total||0)-(a.qtr_total||0)).map((r,i)=>`<div class="leader-row"><div class="rank">${i+1}</div><div class="centre">${siteLabel(r.centre)}<div class="mini">QTR ${fmt(r.qtr_total)} · Budget ${fmt(r.qtr_budget)}</div></div><div class="pct">${fmt(r.qtr_total)}</div>${progress(r.qtr_budget?r.qtr_total/r.qtr_budget:0)}</div>`).join('');
+ document.getElementById('execNote').innerHTML=`<strong>H2 is now the active period.</strong> Dashboard focus has been simplified to new registrations, used cars and non-counting fleet. Q3 new registration target is <strong>${fmt(regTarget)}</strong>, with <strong>${fmt(regToGo)}</strong> still to go in the loaded report. Used car target is <strong>${fmt(usedTarget)}</strong>, with <strong>${fmt(usedToGo)}</strong> still to go. Non-counting fleet currently shows <strong>${fmt(nonFleetCurrent)}</strong> against a budget of <strong>${fmt(nonFleetBudget)}</strong>. Sales funnel totals are now shown at the top: enquiries, test drive %, offer sheet % and conversion %. Full sales activity remains available in its own tab.`;
  makeTable('q3Table',[{label:'Centre',key:'centre'},{label:'Jul Total',key:'jul_total',num:true},{label:'Jul Target',key:'jul_target',num:true},{label:'Aug Total',key:'aug_total',num:true},{label:'Aug Target',key:'aug_target',num:true},{label:'Sep Total',key:'sep_total',num:true},{label:'Sep Target',key:'sep_target',num:true},{label:'QTR Total',key:'qtr_total',num:true},{label:'QTR Target',key:'qtr_target',num:true},{label:'Progress',value:r=>r.qtr_target?r.qtr_total/r.qtr_target:0,format:'progress'},{label:'%',value:r=>r.qtr_target?r.qtr_total/r.qtr_target:0,format:'pct',num:true},{label:'To Go',key:'to_go',num:true},{label:'Per Week',key:'per_week',num:true},{label:'Status',value:r=>r.qtr_target?r.qtr_total/r.qtr_target:0,format:'status'}],DATA.q3_regs);
  makeTable('usedTable',[{label:'Centre',key:'centre'},{label:'Jul Used',key:'jul_counting',num:true},{label:'Jul Target',key:'jul_target',num:true},{label:'Aug Used',key:'aug_counting',num:true},{label:'Aug Target',key:'aug_target',num:true},{label:'Sep Used',key:'sep_counting',num:true},{label:'Sep Target',key:'sep_target',num:true},{label:'QTR Used',key:'qtr_counting',num:true},{label:'QTR Target',key:'qtr_target',num:true},{label:'Progress',value:r=>r.qtr_target?r.qtr_counting/r.qtr_target:0,format:'progress'},{label:'%',value:r=>r.qtr_target?r.qtr_counting/r.qtr_target:0,format:'pct',num:true},{label:'Status',value:r=>r.qtr_target?r.qtr_counting/r.qtr_target:0,format:'status'}],DATA.q3_used);
  makeTable('fleetMonthlyTable',[{label:'Centre',key:'centre'},{label:'Jul Fleet',key:'jul_fleet',num:true},{label:'Aug Fleet',key:'aug_fleet',num:true},{label:'Sep Fleet',key:'sep_fleet',num:true},{label:'QTR Fleet',key:'qtr_fleet',num:true},{label:'BCH Regs',key:'bch_regs',num:true},{label:'BCH Target',key:'bch_target',num:true},{label:'BCH Progress',value:r=>r.bch_target?r.bch_regs/r.bch_target:0,format:'progress'},{label:'BCH %',value:r=>r.bch_target?r.bch_regs/r.bch_target:0,format:'pct',num:true},{label:'Active Orders',key:'active_orders',num:true}],DATA.q3_fleet_monthly);
