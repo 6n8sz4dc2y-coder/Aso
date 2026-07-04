@@ -1,11 +1,5 @@
 # Changelog
 
-## v0.9.1
-- Kept the v0.9 root-file build and styling.
-- Removed the Fleet by Month + BCH Position box.
-- Dashboard funnel cards now split New / Used / Total for enquiries, test drive %, offer sheet % and conversion %.
-- Added updated test values so the dashboard is populated for review.
-
 ## v0.9
 - Reordered dashboard cards and summary sections.
 - Added Highlights panel.
