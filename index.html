@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Dealer Registration Dashboard Prototype</title>
+<style>
+  :root{--bg:#0f172a;--card:#111827;--muted:#94a3b8;--text:#e5e7eb;--green:#22c55e;--amber:#f59e0b;--red:#ef4444;--blue:#38bdf8;--line:#1f2937;}
+  *{box-sizing:border-box} body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:linear-gradient(180deg,#0b1224,#111827);color:var(--text)}
+  header{padding:28px 24px 12px;max-width:1200px;margin:auto} h1{margin:0;font-size:32px;letter-spacing:-.03em} .sub{color:var(--muted);margin-top:6px}
+  main{max-width:1200px;margin:auto;padding:16px 24px 40px}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:18px 0}
+  .kpi,.card{background:rgba(17,24,39,.86);border:1px solid #243044;border-radius:18px;padding:18px;box-shadow:0 10px 30px rgba(0,0,0,.22)}
+  .kpi .label{color:var(--muted);font-size:13px}.kpi .val{font-size:34px;font-weight:800;margin-top:4px}.kpi .hint{font-size:13px;color:var(--muted)}
+  .controls{display:flex;gap:12px;flex-wrap:wrap;margin:16px 0 10px} button{background:#172033;color:var(--text);border:1px solid #2a3a52;border-radius:999px;padding:10px 14px;cursor:pointer} button.active{background:#e5e7eb;color:#0f172a}.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.title{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.pill{font-size:12px;padding:5px 9px;border-radius:999px;font-weight:700}.g{background:rgba(34,197,94,.16);color:#86efac}.a{background:rgba(245,158,11,.16);color:#fcd34d}.r{background:rgba(239,68,68,.16);color:#fecaca}
+  .name{font-size:20px;font-weight:800}.big{font-size:36px;font-weight:900;letter-spacing:-.04em}.bar{height:12px;background:#1f2937;border-radius:999px;overflow:hidden;margin:12px 0}.fill{height:100%;border-radius:999px;background:var(--green);width:0}.fill.amber{background:var(--amber)}.fill.red{background:var(--red)}
+  .meta{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}.meta div{background:#0b1220;border:1px solid #1e293b;border-radius:12px;padding:10px}.meta b{display:block;font-size:18px}.meta span{color:var(--muted);font-size:12px} table{width:100%;border-collapse:collapse;margin-top:12px} th,td{padding:11px;border-bottom:1px solid #243044;text-align:left} th{color:var(--muted);font-weight:600;font-size:13px} td.num{text-align:right;font-variant-numeric:tabular-nums}.section{margin-top:24px}.small{color:var(--muted);font-size:13px;margin-top:8px}
+  @media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}.cards{grid-template-columns:1fr}} @media(max-width:520px){.grid{grid-template-columns:1fr}.meta{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><h1>Dealer Registration Dashboard</h1><div class="sub">Prototype from existing Toyota Registrations PDF - Q2 total position</div></header>
+<main>
+  <section class="grid" id="kpis"></section>
+  <div class="controls"><button class="active" data-filter="all">All</button><button data-filter="North CDA">North CDA</button><button data-filter="South CDA">South CDA</button><button data-filter="WY CDA">WY CDA</button><button data-filter="cda">CDA Summary</button></div>
+  <section class="cards" id="cards"></section>
+  <section class="section card"><div class="title"><div class="name">League table</div><span class="small">Sorted by % to target</span></div><table id="table"><thead><tr><th>Rank</th><th>Centre</th><th>CDA</th><th>Regs</th><th>Target</th><th>%</th><th>To go</th><th>Per week</th></tr></thead><tbody></tbody></table></section>
+</main>
+<script>
+const data = [{"centre": "Bolton", "cda": "North CDA", "qtr_regs": 101, "target": 96, "pct_to_target": 105, "to_go": -5, "per_week": 9, "type": "centre"}, {"centre": "Bury", "cda": "North CDA", "qtr_regs": 77, "target": 71, "pct_to_target": 108, "to_go": -6, "per_week": 11, "type": "centre"}, {"centre": "Rochdale", "cda": "North CDA", "qtr_regs": 90, "target": 80, "pct_to_target": 113, "to_go": -10, "per_week": 18, "type": "centre"}, {"centre": "Salford Quays", "cda": "North CDA", "qtr_regs": 147, "target": 126, "pct_to_target": 117, "to_go": -21, "per_week": 37, "type": "centre"}, {"centre": "NORTH CDA", "cda": "North CDA", "qtr_regs": 415, "target": 373, "pct_to_target": 111, "to_go": -42, "per_week": 74, "type": "cda"}, {"centre": "Altrincham", "cda": "South CDA", "qtr_regs": 73, "target": 73, "pct_to_target": 100, "to_go": 0, "per_week": 0, "type": "centre"}, {"centre": "Denton", "cda": "South CDA", "qtr_regs": 87, "target": 83, "pct_to_target": 105, "to_go": -4, "per_week": 7, "type": "centre"}, {"centre": "Macclesfield", "cda": "South CDA", "qtr_regs": 83, "target": 81, "pct_to_target": 102, "to_go": -2, "per_week": 4, "type": "centre"}, {"centre": "Stockport", "cda": "South CDA", "qtr_regs": 132, "target": 135, "pct_to_target": 98, "to_go": 3, "per_week": -5, "type": "centre"}, {"centre": "SOUTH CDA", "cda": "South CDA", "qtr_regs": 375, "target": 372, "pct_to_target": 101, "to_go": -3, "per_week": 5, "type": "cda"}, {"centre": "Bradford", "cda": "WY CDA", "qtr_regs": 79, "target": 92, "pct_to_target": 86, "to_go": 13, "per_week": -23, "type": "centre"}, {"centre": "Huddersfield", "cda": "WY CDA", "qtr_regs": 97, "target": 97, "pct_to_target": 100, "to_go": 0, "per_week": 0, "type": "centre"}, {"centre": "Silsden", "cda": "WY CDA", "qtr_regs": 30, "target": 28, "pct_to_target": 107, "to_go": -2, "per_week": 4, "type": "centre"}, {"centre": "WY CDA", "cda": "WY CDA", "qtr_regs": 206, "target": 217, "pct_to_target": 95, "to_go": 11, "per_week": -19, "type": "cda"}, {"centre": "GROUP TOTAL", "cda": "Group", "qtr_regs": 996, "target": 962, "pct_to_target": 104, "to_go": -34, "per_week": 60, "type": "total"}];
+const centres = data.filter(d=>d.type==='centre');
+const total = data.find(d=>d.type==='total');
+function status(d){ if(d.pct_to_target>=103) return ['Ahead','g']; if(d.pct_to_target>=98) return ['On track','a']; return ['Behind','r']; }
+function renderKpis(){
+ const ahead=centres.filter(d=>d.pct_to_target>=100).length;
+ const behind=centres.filter(d=>d.pct_to_target<100).length;
+ const wy=data.find(d=>d.centre==='WY CDA');
+ document.getElementById('kpis').innerHTML = `
+ <div class="kpi"><div class="label">Group QTR regs</div><div class="val">${total.qtr_regs}</div><div class="hint">Target ${total.target} - ${total.pct_to_target}%</div></div>
+ <div class="kpi"><div class="label">Group position</div><div class="val">${total.to_go}</div><div class="hint">Negative means ahead of target</div></div>
+ <div class="kpi"><div class="label">Centres at/above target</div><div class="val">${ahead}</div><div class="hint">${behind} below target</div></div>
+ <div class="kpi"><div class="label">WY CDA</div><div class="val">${wy.pct_to_target}%</div><div class="hint">${wy.qtr_regs}/${wy.target}, ${wy.to_go} to go</div></div>`;
+}
+function card(d){ const [s,c]=status(d); const w=Math.min(d.pct_to_target,125); const barClass=d.pct_to_target>=103?'':d.pct_to_target>=98?'amber':'red'; return `<article class="card"><div class="title"><div class="name">${d.centre}</div><span class="pill ${c}">${s}</span></div><div class="big">${d.pct_to_target}%</div><div class="bar"><div class="fill ${barClass}" style="width:${w}%"></div></div><div class="meta"><div><b>${d.qtr_regs}</b><span>Regs</span></div><div><b>${d.target}</b><span>Target</span></div><div><b>${d.to_go}</b><span>To go</span></div></div></article>`; }
+function render(filter='all'){
+ let arr=data.filter(d=>d.type!=='total');
+ if(filter==='cda') arr=arr.filter(d=>d.type==='cda');
+ else if(filter!=='all') arr=arr.filter(d=>d.cda===filter && d.type==='centre');
+ else arr=arr.filter(d=>d.type==='centre');
+ document.getElementById('cards').innerHTML=arr.map(card).join('');
+ const tableArr=arr.slice().sort((a,b)=>b.pct_to_target-a.pct_to_target);
+ document.querySelector('#table tbody').innerHTML=tableArr.map((d,i)=>`<tr><td>${i+1}</td><td>${d.centre}</td><td>${d.cda}</td><td class="num">${d.qtr_regs}</td><td class="num">${d.target}</td><td class="num">${d.pct_to_target}%</td><td class="num">${d.to_go}</td><td class="num">${d.per_week}</td></tr>`).join('');
+}
+document.querySelectorAll('button').forEach(b=>b.onclick=()=>{document.querySelectorAll('button').forEach(x=>x.classList.remove('active'));b.classList.add('active');render(b.dataset.filter)});
+renderKpis(); render();
+</script>
+</body></html>
