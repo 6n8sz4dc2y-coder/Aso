@@ -1,8 +1,13 @@
 # Changelog
 
-## v0.1.0
+## v0.3
+- Added Order Bank page from OB target sheet.
+- Added Sales Funnel page from SalesActivity export.
+- Added monthly fleet view alongside BCH Q3 position.
+- Kept wide tables searchable and readable.
 
-- Initial GitHub Pages version
-- Static RRG Group Dashboard
-- Readable tables
-- Dashboard, registrations, used cars, centres and charts views
+## v0.2
+- Split dashboard into GitHub-friendly files.
+
+## v0.1
+- Initial static dashboard.
