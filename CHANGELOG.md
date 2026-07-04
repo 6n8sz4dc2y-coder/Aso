@@ -1,19 +1,12 @@
 # Changelog
 
+## v0.5
+- Split H1 and H2 order bank into clearer dashboard cards.
+- Changed order bank to a monthly objective view.
+- Added July target, July orders done, July to go and July progress.
+- Removed “your seven sites” wording from headings and notes.
+- Kept Q3 registrations, used cars, fleet BCH and sales funnel views.
+
 ## v0.4
-- Added H2 active period indicator.
-- Added H2 Order Bank Target card.
-- Focused dashboard Order Bank snapshot on the seven sites Gavin looks after.
-- Focused dashboard Sales Funnel snapshot on the seven sites Gavin looks after.
-- Kept H1 order performance visible for reference.
-
-## v0.3
-- Added Order Bank page from OB target sheet.
-- Added Sales Funnel page from SalesActivity export.
-- Added monthly fleet view alongside BCH Q3 position.
-
-## v0.2
-- Split dashboard into GitHub-friendly files.
-
-## v0.1
-- Initial static dashboard.
+- H2 active dashboard.
+- Order bank and sales funnel snapshots added.
