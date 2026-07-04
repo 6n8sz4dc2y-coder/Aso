@@ -1,8 +1,7 @@
 # Changelog
 
-## v0.7
-- Added top dashboard KPI cards for total enquiries, test drive percentage, offer sheet percentage and conversion percentage.
-- Dashboard remains focused on new registrations, used cars and non-counting fleet, with sales activity totals visible at a glance.
-
-## v0.6
-- Simplified dashboard focus to new registrations, used cars and non-counting fleet.
+## v0.8
+- Restored Orders tab to navigation.
+- Fixed missing sales funnel and Q2 reference tables by adding the order lookup function.
+- Reworked dashboard top cards into 3 headline KPI cards plus 4 sales funnel cards underneath.
+- Non-counting fleet dashboard snapshot now shows Salford and Bradford only.

@@ -1,17 +1,6 @@
 # RRG Group Dashboard
 
-GitHub Pages dashboard for weekly dealership performance.
+Static GitHub Pages dashboard. Upload all files in this folder to the root of the GitHub repository.
 
-## v0.7
-
-Dashboard top cards include:
-
-- Q3 new registrations
-- Q3 used cars
-- Non-counting fleet
-- Total enquiries
-- Test drive percentage
-- Offer sheet percentage
-- Conversion percentage
-
-Upload these files to the root of the GitHub repository and use GitHub Pages from the `main` branch.
+## v0.8
+Dashboard focuses on new registrations, used cars, non-counting fleet, and sales funnel KPIs. Orders, Q2 reference, sales funnel, fleet, registrations and used car tables remain as separate tabs.

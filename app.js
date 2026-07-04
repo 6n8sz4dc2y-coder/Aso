@@ -3,6 +3,7 @@ const DATA = {"q3_regs": [{"centre": "Bolton", "jul_counting": 0, "jul_clcp": 0,
 const fmt=n=>{if(n===null||n===undefined||Number.isNaN(n))return "-";return new Intl.NumberFormat('en-GB',{maximumFractionDigits:0}).format(n)};
 const pct=n=>{if(n===null||n===undefined||Number.isNaN(n))return "-";return Math.round(n*100)+"%"};
 const siteLabel=c=>c==='SQ'?'SQ':c;
+function activityOrdersFor(centre){const normal=x=>String(x||'').trim().toLowerCase().replace('salford quays','sq');const row=(DATA.dashboard_activity||[]).find(r=>normal(r.centre)===normal(centre));return row ? (Number(row.total_orders)||0) : 0;}
 const statusClass=n=> n>=1?'green':n>=.9?'amber':'red';
 const progress=n=>`<div class="progress"><div class="bar ${statusClass(n)}" style="width:${Math.min(Math.max(n*100,0),120)}%"></div></div>`;
 const status=n=>`<span class="status ${statusClass(n)}">${n>=1?'On / Ahead':n>=.9?'Watch':'Behind'}</span>`;
@@ -17,10 +18,13 @@ function build(){
  const nonFleetBudget=sum(non,'qtr_budget'), nonFleetCurrent=sum(non,'qtr_total');
  document.getElementById('q3Target').textContent=fmt(regTarget);
  document.getElementById('q3Current').textContent=fmt(regCurrent);
+ document.getElementById('q3Pct').textContent=pct(regTarget?regCurrent/regTarget:0);
  document.getElementById('usedTarget').textContent=fmt(usedTarget);
  document.getElementById('usedCurrent').textContent=fmt(usedCurrent);
+ document.getElementById('usedPct').textContent=pct(usedTarget?usedCurrent/usedTarget:0);
  document.getElementById('nonFleetBudget').textContent=fmt(nonFleetBudget);
  document.getElementById('nonFleetCurrent').textContent=fmt(nonFleetCurrent);
+ document.getElementById('nonFleetPct').textContent=pct(nonFleetBudget?nonFleetCurrent/nonFleetBudget:0);
  const act = DATA.dashboard_activity || [];
  const totalEnquiries = sum(act,'total_enquiries');
  const totalTestDrives = sum(act,'total_test_drives');
@@ -35,7 +39,7 @@ function build(){
  document.getElementById('cdaSummary').innerHTML=[north,wy].filter(Boolean).map(r=>`<div class="leader-row"><div class="rank">●</div><div class="centre">${r.centre}<div class="mini">${fmt(r.qtr_total)} / ${fmt(r.qtr_target)} · To go ${fmt(r.to_go)}</div></div><div class="pct">${pct(r.qtr_target?r.qtr_total/r.qtr_target:0)}</div>${progress(r.qtr_target?r.qtr_total/r.qtr_target:0)}</div>`).join('');
  document.getElementById('leaderboard').innerHTML=leaderRows(regs,r=>r.qtr_target?r.qtr_total/r.qtr_target:0,r=>`${fmt(r.qtr_total)} / ${fmt(r.qtr_target)} · To go ${fmt(r.to_go)}`);
  document.getElementById('usedSummary').innerHTML=leaderRows(used,r=>r.qtr_target?r.qtr_counting/r.qtr_target:0,r=>`${fmt(r.qtr_counting)} / ${fmt(r.qtr_target)} · To go ${fmt((r.qtr_target||0)-(r.qtr_counting||0))}`);
- document.getElementById('nonFleetSummary').innerHTML=non.slice().sort((a,b)=>(b.qtr_total||0)-(a.qtr_total||0)).map((r,i)=>`<div class="leader-row"><div class="rank">${i+1}</div><div class="centre">${siteLabel(r.centre)}<div class="mini">QTR ${fmt(r.qtr_total)} · Budget ${fmt(r.qtr_budget)}</div></div><div class="pct">${fmt(r.qtr_total)}</div>${progress(r.qtr_budget?r.qtr_total/r.qtr_budget:0)}</div>`).join('');
+ document.getElementById('nonFleetSummary').innerHTML=non.filter(r=>['Salford','Bradford'].includes(r.centre)).sort((a,b)=>(b.qtr_total||0)-(a.qtr_total||0)).map((r,i)=>`<div class="leader-row"><div class="rank">${i+1}</div><div class="centre">${siteLabel(r.centre)}<div class="mini">QTR ${fmt(r.qtr_total)} · Budget ${fmt(r.qtr_budget)}</div></div><div class="pct">${fmt(r.qtr_total)}</div>${progress(r.qtr_budget?r.qtr_total/r.qtr_budget:0)}</div>`).join('');
  document.getElementById('execNote').innerHTML=`<strong>H2 is now the active period.</strong> Dashboard focus has been simplified to new registrations, used cars and non-counting fleet. Q3 new registration target is <strong>${fmt(regTarget)}</strong>, with <strong>${fmt(regToGo)}</strong> still to go in the loaded report. Used car target is <strong>${fmt(usedTarget)}</strong>, with <strong>${fmt(usedToGo)}</strong> still to go. Non-counting fleet currently shows <strong>${fmt(nonFleetCurrent)}</strong> against a budget of <strong>${fmt(nonFleetBudget)}</strong>. Sales funnel totals are now shown at the top: enquiries, test drive %, offer sheet % and conversion %. Full sales activity remains available in its own tab.`;
  makeTable('q3Table',[{label:'Centre',key:'centre'},{label:'Jul Total',key:'jul_total',num:true},{label:'Jul Target',key:'jul_target',num:true},{label:'Aug Total',key:'aug_total',num:true},{label:'Aug Target',key:'aug_target',num:true},{label:'Sep Total',key:'sep_total',num:true},{label:'Sep Target',key:'sep_target',num:true},{label:'QTR Total',key:'qtr_total',num:true},{label:'QTR Target',key:'qtr_target',num:true},{label:'Progress',value:r=>r.qtr_target?r.qtr_total/r.qtr_target:0,format:'progress'},{label:'%',value:r=>r.qtr_target?r.qtr_total/r.qtr_target:0,format:'pct',num:true},{label:'To Go',key:'to_go',num:true},{label:'Per Week',key:'per_week',num:true},{label:'Status',value:r=>r.qtr_target?r.qtr_total/r.qtr_target:0,format:'status'}],DATA.q3_regs);
  makeTable('usedTable',[{label:'Centre',key:'centre'},{label:'Jul Used',key:'jul_counting',num:true},{label:'Jul Target',key:'jul_target',num:true},{label:'Aug Used',key:'aug_counting',num:true},{label:'Aug Target',key:'aug_target',num:true},{label:'Sep Used',key:'sep_counting',num:true},{label:'Sep Target',key:'sep_target',num:true},{label:'QTR Used',key:'qtr_counting',num:true},{label:'QTR Target',key:'qtr_target',num:true},{label:'Progress',value:r=>r.qtr_target?r.qtr_counting/r.qtr_target:0,format:'progress'},{label:'%',value:r=>r.qtr_target?r.qtr_counting/r.qtr_target:0,format:'pct',num:true},{label:'Status',value:r=>r.qtr_target?r.qtr_counting/r.qtr_target:0,format:'status'}],DATA.q3_used);
