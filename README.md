@@ -12,3 +12,7 @@ GitHub Pages dashboard for weekly RRG Group performance reporting.
 
 ## Deploy
 Upload all files to the root of your GitHub Pages repository.
+
+
+## Admin updates
+Open the Admin Update tab, upload Weekly Update.xlsx and Sales Activity.xls, press Preview Import, then Publish. The update is stored in the browser using localStorage. Use Download data backup to keep a JSON copy of the latest data.
