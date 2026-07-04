@@ -1,12 +1,12 @@
 # Changelog
 
-## Release 1.1
+## v0.9
+- Reordered dashboard cards and summary sections.
+- Added Highlights panel.
+- Ranked Sales Funnel by total orders.
+- Ranked Order Bank by July done/current-month done.
+- Kept Q3 registrations, used cars and fleet sections intact.
 
-- Rebuilt project into maintainable folders: `css`, `js`, `data`, `assets`.
-- Dashboard now loads data from `data/weekly-data.js`.
-- Added New / Used / Total splits for:
-  - Enquiries
-  - Test Drive %
-  - Offer Sheet %
-  - Conversion %
-- Keeps Admin Update and Trends functionality.
+## v0.8
+- Restored Q2 reference, sales funnel and orders tabs.
+- Simplified dashboard summary cards.
