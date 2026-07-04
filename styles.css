@@ -7,8 +7,11 @@
 
 .kpi.primary{grid-column:span 4;min-height:140px}.kpi.secondary{grid-column:span 3;min-height:116px}.kpi.primary .value{font-size:42px}.kpi strong{color:#111827}@media(max-width:900px){.kpi.primary,.kpi.secondary{grid-column:span 12}}
 
-.split-card .value{margin-bottom:10px}
-.split-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px;font-size:12px;color:var(--muted)}
-.split-grid div{border:1px solid var(--line);border-radius:10px;background:#f8fafc;padding:7px 6px;text-align:center;font-weight:800}
-.split-grid strong{display:block;color:var(--ink);font-size:15px;margin-top:2px}
-@media(max-width:900px){.split-grid{grid-template-columns:repeat(3,1fr)}}
+
+/* Dashboard split KPI cards */
+.split-card .split-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0}
+.split-card .split-metrics div{display:flex;flex-direction:column;gap:4px;align-items:center;border-right:1px solid #e5e7eb}
+.split-card .split-metrics div:last-child{border-right:none}
+.split-card .split-metrics span{font-size:12px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.05em}
+.split-card .split-metrics strong{font-size:20px;color:var(--ink);font-weight:900;letter-spacing:-.03em}
+@media(max-width:900px){.split-card .split-metrics strong{font-size:18px}}
