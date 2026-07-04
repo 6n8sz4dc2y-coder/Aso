@@ -185,12 +185,12 @@ function publishImport(){
   if(!pendingData) return;
   DATA=pendingData; build();
   const h=history(); h.push(getSnapshot(DATA)); saveHistory(h); renderTrends();
-  document.getElementById('importStatus').innerHTML='Published in this browser and archived as a weekly snapshot. Download <strong>weekly-data.js</strong> and replace <strong>data/weekly-data.js</strong> in GitHub to update the live dashboard for everyone.';
+  document.getElementById('importStatus').innerHTML='Published in this browser and archived as a weekly snapshot. Download <strong>data.js</strong> and replace <strong>data/data.js</strong> in GitHub to update the live dashboard for everyone.';
 }
 function downloadDataFile(){
   const d=pendingData||DATA;
   const blob=new Blob(['let DATA = '+JSON.stringify(d,null,2)+';\n'],{type:'text/javascript'});
-  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='weekly-data.js'; a.click(); URL.revokeObjectURL(a.href);
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='data.js'; a.click(); URL.revokeObjectURL(a.href);
 }
 function wireAdmin(){
   const p=document.getElementById('previewImport'); if(p) p.addEventListener('click',handlePreviewImport);
