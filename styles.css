@@ -37,3 +37,19 @@
 .kpi-footer-strip span{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#64748b;font-weight:900}
 .kpi-footer-strip strong{font-size:20px;letter-spacing:-.03em}.blue-card .kpi-footer-strip strong{color:#1d4ed8}.green-card .kpi-footer-strip strong{color:#15803d}.purple-card .kpi-footer-strip strong{color:#7e22ce}
 @media(max-width:900px){.kpi-progress-card{min-height:auto}.kpi-split-main{grid-template-columns:1fr}.kpi-split-main>div:first-child{border-right:0;border-bottom:1px solid var(--line);padding-right:0;padding-bottom:12px}.month-progress-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.kpi-footer-strip{grid-template-columns:1fr}}
+
+/* Fix: keep run rate value and '/ week' on one line with matching KPI font */
+.kpi-footer-strip strong span{
+  display:inline !important;
+  font-size:inherit !important;
+  text-transform:none !important;
+  letter-spacing:inherit !important;
+  color:inherit !important;
+  font-weight:inherit !important;
+}
+.kpi-footer-strip strong{
+  display:inline-flex;
+  align-items:baseline;
+  gap:4px;
+  white-space:nowrap;
+}
