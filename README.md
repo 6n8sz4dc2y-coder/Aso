@@ -20,3 +20,7 @@ Open the Admin Update tab, upload Weekly Update.xlsx and Sales Activity.xls, pre
 
 ### Order Bank upload
 Use the Order Bank Targets workbook in the Admin tab for the Orders / Order Bank tab. This is separate from the Orders column inside Sales Activity.
+
+
+## Cache/version display
+The dashboard now shows the current version and published timestamp in the header, footer and Admin tab. CSS and JS files are referenced with a version query string to help force mobile browsers to fetch the latest files after a GitHub update.

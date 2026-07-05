@@ -1,5 +1,11 @@
 # Changelog
 
+## Cache/version update
+- Added dashboard version and published timestamp.
+- Added versioned CSS/JS links to reduce browser and iPhone caching issues.
+- Admin publish now records the live version in this browser.
+
+
 ## v0.9
 - Reordered dashboard cards and summary sections.
 - Added Highlights panel.
