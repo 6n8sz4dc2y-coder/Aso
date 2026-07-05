@@ -1,26 +1,14 @@
 # RRG Group Dashboard
 
-GitHub Pages dashboard for weekly RRG Group performance reporting.
+Root-file GitHub Pages dashboard.
 
-## v0.9
-- Dashboard keeps the top focus on new registrations, used cars and non-counting fleet.
-- Sales funnel table is ranked by orders.
-- Order bank tables are ranked by July done / current-month order volume.
-- Centre registration targets are ranked by percentage to target.
-- Used cars are ranked by percentage to target.
-- Added a dashboard highlights box.
+Upload these files directly to the root of the repo:
 
-## Deploy
-Upload all files to the root of your GitHub Pages repository.
+- `index.html`
+- `styles.css`
+- `app.js`
+- `README.md`
+- `CHANGELOG.md`
+- `LICENSE`
 
-
-## Admin updates
-Open the Admin Update tab, upload Weekly Update.xlsx and Sales Activity.xls, press Preview Import, then Publish. The update is stored in the browser using localStorage. Use Download data backup to keep a JSON copy of the latest data.
-
-
-### Order Bank upload
-Use the Order Bank Targets workbook in the Admin tab for the Orders / Order Bank tab. This is separate from the Orders column inside Sales Activity.
-
-
-## Cache/version display
-The dashboard now shows the current version and published timestamp in the header, footer and Admin tab. CSS and JS files are referenced with a version query string to help force mobile browsers to fetch the latest files after a GitHub update.
+This version keeps the existing style and adds richer KPI boxes for New Registrations, Used Cars and Non-Counting Fleet.

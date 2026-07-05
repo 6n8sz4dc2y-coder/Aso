@@ -73,21 +73,59 @@ function highlights(regs,used,acts,orders){
  if(obTop) lines.push(`<div><strong>${siteLabel(obTop.centre)}</strong> is strongest on order bank done with <strong>${fmt(orderDoneFor(obTop,currentOrderMonth()))}</strong> orders.</div>`);
  return lines.join('');
 }
+
+function setText(id, value){ const el=document.getElementById(id); if(el) el.textContent=value; }
+function q3WeeksRemaining(){
+ const now=new Date();
+ const end=new Date(now.getFullYear(),8,30,23,59,59); // 30 September
+ if(now>end) return 1;
+ return Math.max(1, Math.ceil((end-now)/(7*24*60*60*1000)));
+}
+function quarterMonthKey(){
+ const m=new Date().getMonth();
+ if(m===7) return 'aug';
+ if(m===8) return 'sep';
+ return 'jul';
+}
+function updateProgressKpi(prefix, rows, config){
+ const currentMonth=quarterMonthKey();
+ const valueKey=config.valueKey;
+ const targetKey=config.targetKey;
+ const qtrValueKey=config.qtrValueKey;
+ const qtrTargetKey=config.qtrTargetKey;
+ const months=['jul','aug','sep'];
+ const monthValue=sum(rows, currentMonth + '_' + valueKey);
+ const monthTarget=sum(rows, currentMonth + '_' + targetKey);
+ const qtrValue=sum(rows, qtrValueKey);
+ const qtrTarget=sum(rows, qtrTargetKey);
+ const remaining=qtrTarget-qtrValue;
+ const weeks=q3WeeksRemaining();
+ setText(prefix+'MonthPct', pct(monthTarget ? monthValue/monthTarget : 0));
+ setText(prefix+'MonthCurrent', fmt(monthValue));
+ setText(prefix+'MonthTarget', fmt(monthTarget));
+ setText(prefix+'Pct', pct(qtrTarget ? qtrValue/qtrTarget : 0));
+ setText(prefix+'Current', fmt(qtrValue));
+ setText(prefix+'Target', fmt(qtrTarget));
+ months.forEach(m=>{
+   const mv=sum(rows, m+'_'+valueKey);
+   const mt=sum(rows, m+'_'+targetKey);
+   const cap=m.charAt(0).toUpperCase()+m.slice(1);
+   setText(prefix+cap+'Pct', pct(mt ? mv/mt : 0));
+   setText(prefix+cap+'Vol', `${fmt(mv)} / ${fmt(mt)}`);
+ });
+ setText(prefix+'Remaining', fmt(remaining));
+ setText(prefix+'RunRate', fmt(Math.max(0, Math.ceil(remaining / weeks))));
+}
+
 function build(){
  updateVersionDisplays();
  const regs=DATA.dashboard_regs, used=DATA.dashboard_used, non=DATA.q3_non, acts=DATA.dashboard_activity;
  const regTarget=sum(regs,'qtr_target'), regCurrent=sum(regs,'qtr_total'), regToGo=regTarget-regCurrent;
  const usedTarget=sum(used,'qtr_target'), usedCurrent=sum(used,'qtr_counting'), usedToGo=usedTarget-usedCurrent;
  const nonFleetBudget=sum(non,'qtr_budget'), nonFleetCurrent=sum(non,'qtr_total');
- document.getElementById('q3Target').textContent=fmt(regTarget);
- document.getElementById('q3Current').textContent=fmt(regCurrent);
- document.getElementById('q3Pct').textContent=pct(regTarget?regCurrent/regTarget:0);
- document.getElementById('usedTarget').textContent=fmt(usedTarget);
- document.getElementById('usedCurrent').textContent=fmt(usedCurrent);
- document.getElementById('usedPct').textContent=pct(usedTarget?usedCurrent/usedTarget:0);
- document.getElementById('nonFleetBudget').textContent=fmt(nonFleetBudget);
- document.getElementById('nonFleetCurrent').textContent=fmt(nonFleetCurrent);
- document.getElementById('nonFleetPct').textContent=pct(nonFleetBudget?nonFleetCurrent/nonFleetBudget:0);
+ updateProgressKpi('q3', regs, {valueKey:'total', targetKey:'target', qtrValueKey:'qtr_total', qtrTargetKey:'qtr_target'});
+ updateProgressKpi('used', used, {valueKey:'counting', targetKey:'target', qtrValueKey:'qtr_counting', qtrTargetKey:'qtr_target'});
+ updateProgressKpi('nonFleet', non, {valueKey:'total', targetKey:'budget', qtrValueKey:'qtr_total', qtrTargetKey:'qtr_budget'});
  const act = DATA.dashboard_activity || [];
  const totalEnquiries = sum(act,'total_enquiries');
  const totalTestDrives = sum(act,'total_test_drives');

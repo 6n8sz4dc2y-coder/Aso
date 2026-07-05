@@ -10,9 +10,45 @@
 <header><div class="header-row"><div><h1>RRG Group Dashboard</h1><div class="subtitle">Weekly performance dashboard · H2 active · new registrations, used cars and fleet</div><div id="h2Period" class="period-row"></div></div><div class="subtitle"><span id="liveVersionHeader">Version -</span><br><span id="livePublishedHeader">Published -</span></div></div><nav><button class="active" data-target="dashboard">Dashboard</button><button data-target="q3regs">Q3 Registrations</button><button data-target="used">Used Cars</button><button data-target="fleet">Fleet</button><button data-target="orders">Orders</button><button data-target="activity">Sales Funnel</button><button data-target="q2">Q2 Reference</button><button data-target="admin">Admin Update</button></nav></header>
 <main>
 <section id="dashboard" class="section active"><div class="grid">
-<div class="card kpi primary"><div class="label">Q3 New Registrations</div><div class="value" id="q3Pct">-</div><div class="note"><strong id="q3Current">-</strong> / <strong id="q3Target">-</strong> target</div></div>
-<div class="card kpi primary"><div class="label">Q3 Used Cars</div><div class="value" id="usedPct">-</div><div class="note"><strong id="usedCurrent">-</strong> / <strong id="usedTarget">-</strong> target</div></div>
-<div class="card kpi primary"><div class="label">Non-Counting Fleet</div><div class="value" id="nonFleetPct">-</div><div class="note"><strong id="nonFleetCurrent">-</strong> / <strong id="nonFleetBudget">-</strong> budget</div></div>
+<div class="card kpi primary kpi-progress-card blue-card">
+  <div class="label">Q3 New Registrations</div>
+  <div class="kpi-split-main">
+    <div><div class="mini-label">Month to date</div><div class="value" id="q3MonthPct">-</div><div class="note"><strong id="q3MonthCurrent">-</strong> / <strong id="q3MonthTarget">-</strong> target</div></div>
+    <div><div class="mini-label">Q3 total</div><div class="value" id="q3Pct">-</div><div class="note"><strong id="q3Current">-</strong> / <strong id="q3Target">-</strong> target</div></div>
+  </div>
+  <div class="month-progress-grid">
+    <div><span>Jul</span><strong id="q3JulPct">-</strong><small id="q3JulVol">-</small></div>
+    <div><span>Aug</span><strong id="q3AugPct">-</strong><small id="q3AugVol">-</small></div>
+    <div><span>Sep</span><strong id="q3SepPct">-</strong><small id="q3SepVol">-</small></div>
+  </div>
+  <div class="kpi-footer-strip"><div><span>Remaining</span><strong id="q3Remaining">-</strong></div><div><span>Run rate required</span><strong><span id="q3RunRate">-</span> / week</strong></div></div>
+</div>
+<div class="card kpi primary kpi-progress-card green-card">
+  <div class="label">Q3 Used Cars</div>
+  <div class="kpi-split-main">
+    <div><div class="mini-label">Month to date</div><div class="value" id="usedMonthPct">-</div><div class="note"><strong id="usedMonthCurrent">-</strong> / <strong id="usedMonthTarget">-</strong> target</div></div>
+    <div><div class="mini-label">Q3 total</div><div class="value" id="usedPct">-</div><div class="note"><strong id="usedCurrent">-</strong> / <strong id="usedTarget">-</strong> target</div></div>
+  </div>
+  <div class="month-progress-grid">
+    <div><span>Jul</span><strong id="usedJulPct">-</strong><small id="usedJulVol">-</small></div>
+    <div><span>Aug</span><strong id="usedAugPct">-</strong><small id="usedAugVol">-</small></div>
+    <div><span>Sep</span><strong id="usedSepPct">-</strong><small id="usedSepVol">-</small></div>
+  </div>
+  <div class="kpi-footer-strip"><div><span>Remaining</span><strong id="usedRemaining">-</strong></div><div><span>Run rate required</span><strong><span id="usedRunRate">-</span> / week</strong></div></div>
+</div>
+<div class="card kpi primary kpi-progress-card purple-card">
+  <div class="label">Non-Counting Fleet</div>
+  <div class="kpi-split-main">
+    <div><div class="mini-label">Month to date</div><div class="value" id="nonFleetMonthPct">-</div><div class="note"><strong id="nonFleetMonthCurrent">-</strong> / <strong id="nonFleetMonthBudget">-</strong> budget</div></div>
+    <div><div class="mini-label">Q3 total</div><div class="value" id="nonFleetPct">-</div><div class="note"><strong id="nonFleetCurrent">-</strong> / <strong id="nonFleetBudget">-</strong> budget</div></div>
+  </div>
+  <div class="month-progress-grid">
+    <div><span>Jul</span><strong id="nonFleetJulPct">-</strong><small id="nonFleetJulVol">-</small></div>
+    <div><span>Aug</span><strong id="nonFleetAugPct">-</strong><small id="nonFleetAugVol">-</small></div>
+    <div><span>Sep</span><strong id="nonFleetSepPct">-</strong><small id="nonFleetSepVol">-</small></div>
+  </div>
+  <div class="kpi-footer-strip"><div><span>Remaining / over</span><strong id="nonFleetRemaining">-</strong></div><div><span>Budget run rate</span><strong><span id="nonFleetRunRate">-</span> / week</strong></div></div>
+</div>
 <div class="card kpi secondary split-card"><div class="label">Enquiries</div><div class="value" id="totalEnquiries">-</div><div class="split-grid"><div>New <strong id="newEnquiries">-</strong></div><div>Used <strong id="usedEnquiries">-</strong></div><div>Total <strong id="totalEnquiriesSplit">-</strong></div></div></div>
 <div class="card kpi secondary split-card"><div class="label">Test Drive %</div><div class="value" id="totalTdPct">-</div><div class="split-grid"><div>New <strong id="newTdPct">-</strong></div><div>Used <strong id="usedTdPct">-</strong></div><div>Total <strong id="totalTdPctSplit">-</strong></div></div></div>
 <div class="card kpi secondary split-card"><div class="label">Offer Sheet %</div><div class="value" id="totalOsPct">-</div><div class="split-grid"><div>New <strong id="newOsPct">-</strong></div><div>Used <strong id="usedOsPct">-</strong></div><div>Total <strong id="totalOsPctSplit">-</strong></div></div></div>

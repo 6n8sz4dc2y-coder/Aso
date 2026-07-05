@@ -1,36 +1,6 @@
 # Changelog
 
-## Cache/version update
-- Added dashboard version and published timestamp.
-- Added versioned CSS/JS links to reduce browser and iPhone caching issues.
-- Admin publish now records the live version in this browser.
-
-
-## v0.9
-- Reordered dashboard cards and summary sections.
-- Added Highlights panel.
-- Ranked Sales Funnel by total orders.
-- Ranked Order Bank by July done/current-month done.
-- Kept Q3 registrations, used cars and fleet sections intact.
-
-## v0.8
-- Restored Q2 reference, sales funnel and orders tabs.
-- Simplified dashboard summary cards.
-
-
-## v1.0-admin
-- Added Admin Update tab for Weekly Update.xlsx and Sales Activity.xls.
-- Added preview, publish, local browser storage and data backup download.
-- Kept root-file GitHub Pages structure.
-
-## v0.9 Admin Orders
-- Added Order Bank upload to Admin Update.
-- Order Bank tab can now be updated from the order bank spreadsheet.
-- Keeps root-file GitHub Pages structure unchanged.
-
-
-## Order Bank import fix
-- Order Bank admin upload now strips the RRG prefix from centre names.
-- Orders / Order Bank tab reads the dedicated Order Bank Targets file.
-- Sales Activity orders remain separate and only affect the Sales Funnel tab.
-- Embedded order bank data refreshed from the supplied workbook.
+## KPI progress update
+- Kept the existing root-file GitHub Pages build.
+- Updated the three main dashboard boxes to show current-month %, Q3 total %, Jul/Aug/Sep progress, remaining volume and weekly run rate required.
+- No folder structure changes.
