@@ -122,10 +122,13 @@ function build(){
  const regs=DATA.dashboard_regs, used=DATA.dashboard_used, non=DATA.q3_non, acts=DATA.dashboard_activity;
  const regTarget=sum(regs,'qtr_target'), regCurrent=sum(regs,'qtr_total'), regToGo=regTarget-regCurrent;
  const usedTarget=sum(used,'qtr_target'), usedCurrent=sum(used,'qtr_counting'), usedToGo=usedTarget-usedCurrent;
- const nonFleetBudget=sum(non,'qtr_budget'), nonFleetCurrent=sum(non,'qtr_total');
+ // Non-counting fleet front-page KPI uses CDA total rows only.
+ // Do not sum Salford/Bradford source rows as well, or it double-counts.
+ const nonFleetTotals = non.filter(r=>['NORTH CDA','WY CDA'].includes((r.centre||'').toUpperCase()));
+ const nonFleetBudget=sum(nonFleetTotals,'qtr_budget'), nonFleetCurrent=sum(nonFleetTotals,'qtr_total');
  updateProgressKpi('q3', regs, {valueKey:'total', targetKey:'target', qtrValueKey:'qtr_total', qtrTargetKey:'qtr_target'});
  updateProgressKpi('used', used, {valueKey:'counting', targetKey:'target', qtrValueKey:'qtr_counting', qtrTargetKey:'qtr_target'});
- updateProgressKpi('nonFleet', non, {valueKey:'total', targetKey:'budget', qtrValueKey:'qtr_total', qtrTargetKey:'qtr_budget'});
+ updateProgressKpi('nonFleet', nonFleetTotals, {valueKey:'total', targetKey:'budget', qtrValueKey:'qtr_total', qtrTargetKey:'qtr_budget'});
  const act = DATA.dashboard_activity || [];
  const totalEnquiries = sum(act,'total_enquiries');
  const totalTestDrives = sum(act,'total_test_drives');
