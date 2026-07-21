@@ -134,18 +134,42 @@ function sortableValue(col,row){
 }
 function renderTable(id,cols,rows){
   const table=document.getElementById(id);if(!table)return;
+
+  // Work out the table structure from its headings rather than assuming that
+  // every table has the same first two columns.
+  const rankIndex=cols.findIndex(c=>String(c.label||'').trim().toLowerCase()==='rank');
+  const centreIndex=cols.findIndex(c=>String(c.label||'').trim().toLowerCase()==='centre');
+  const statusIndex=cols.findIndex(c=>String(c.label||'').trim().toLowerCase()==='status' && (c.format==='status' || c.format==='paceStatus'));
+  const statusCol=statusIndex>=0 ? cols[statusIndex] : null;
+  const displayCols=cols.filter((_,i)=>i!==statusIndex);
+
+  table.classList.remove('table-rank','table-centre');
+  if(rankIndex>=0 && centreIndex>=0) table.classList.add('table-rank');
+  else if(centreIndex>=0) table.classList.add('table-centre');
+
   const state=TABLE_SORT_STATE[id]||{};
   const sorted=rows.slice();
   if(state.index!==undefined){
-    const col=cols[state.index];
-    sorted.sort((a,b)=>{
-      const av=sortableValue(col,a), bv=sortableValue(col,b);
-      const bothNum=typeof av==='number' && typeof bv==='number';
-      let cmp=bothNum ? av-bv : String(av).localeCompare(String(bv), undefined, {numeric:true, sensitivity:'base'});
-      return state.dir==='desc' ? -cmp : cmp;
-    });
+    const col=displayCols[state.index];
+    if(col){
+      sorted.sort((a,b)=>{
+        const av=sortableValue(col,a), bv=sortableValue(col,b);
+        const bothNum=typeof av==='number' && typeof bv==='number';
+        let cmp=bothNum ? av-bv : String(av).localeCompare(String(bv), undefined, {numeric:true, sensitivity:'base'});
+        return state.dir==='desc' ? -cmp : cmp;
+      });
+    }
   }
-  table.innerHTML=`<thead><tr>${cols.map((c,i)=>{const active=state.index===i;const arrow=active?(state.dir==='desc'?' ▼':' ▲'):'';return `<th data-sort-index="${i}" class="sortable ${c.num?'num':''} ${active?'sorted':''}" title="Click to sort">${c.label}${arrow}</th>`}).join('')}</tr></thead><tbody>${sorted.map(r=>`<tr class="${String(r.centre||'').includes('CDA')||r.centre==='TOTAL'?'group':''}">${cols.map(c=>`<td class="${c.num?'num':''}">${cell(null,c,r)}</td>`).join('')}</tr>`).join('')}</tbody>`;
+
+  function renderBodyCell(col,row){
+    const centreCol=String(col.label||'').trim().toLowerCase()==='centre';
+    if(centreCol && statusCol){
+      return `<div class="centre-cell"><span class="centre-name">${cell(null,col,row)}</span>${cell(null,statusCol,row)}</div>`;
+    }
+    return cell(null,col,row);
+  }
+
+  table.innerHTML=`<thead><tr>${displayCols.map((c,i)=>{const active=state.index===i;const arrow=active?(state.dir==='desc'?' ▼':' ▲'):'';return `<th data-sort-index="${i}" class="sortable ${c.num?'num':''} ${active?'sorted':''}" title="Click to sort">${c.label}${arrow}</th>`}).join('')}</tr></thead><tbody>${sorted.map(r=>`<tr class="${String(r.centre||'').includes('CDA')||r.centre==='TOTAL'?'group':''}">${displayCols.map(c=>`<td class="${c.num?'num':''}">${renderBodyCell(c,r)}</td>`).join('')}</tr>`).join('')}</tbody>`;
   table.querySelectorAll('th[data-sort-index]').forEach(th=>{
     th.addEventListener('click',()=>{
       const index=Number(th.dataset.sortIndex);
@@ -156,6 +180,7 @@ function renderTable(id,cols,rows){
     });
   });
 }
+
 function makeTable(id,cols,rows){renderTable(id,cols,rows||[])}
 function leaderRows(rows, valueFn, subFn, barFn){return rows.slice().sort((a,b)=>valueFn(b)-valueFn(a)).map((r,i)=>{const v=valueFn(r);const b=barFn?barFn(r):v;return `<div class="leader-row"><div class="rank">${i+1}</div><div class="centre">${siteLabel(r.centre)}<div class="mini">${subFn?subFn(r):''}</div></div><div class="pct">${pct(v)}</div>${barFn?paceProgress(b):progress(v)}</div>`}).join('')}
 function q3ElapsedRatio(){
