@@ -98,3 +98,31 @@ z-index:2;
 box-shadow:2px 0 6px rgba(0,0,0,.08);
 }
 table th:first-child{z-index:3;}
+
+
+/* Version 1.1 sticky table improvements */
+.table-container{
+  overflow-x:auto !important;
+  overflow-y:visible !important;
+  max-height:none !important;
+}
+table{border-collapse:separate;border-spacing:0;}
+table thead th{
+ position:sticky;
+ top:0;
+ z-index:20;
+}
+table th:first-child, table td:first-child{
+ position:sticky;
+ left:0;
+ z-index:15;
+ box-shadow:2px 0 6px rgba(0,0,0,.08);
+}
+table th:nth-child(2), table td:nth-child(2){
+ position:sticky;
+ left:60px;
+ z-index:14;
+ box-shadow:2px 0 6px rgba(0,0,0,.05);
+}
+table thead th:first-child{z-index:30;}
+table thead th:nth-child(2){z-index:29;}
